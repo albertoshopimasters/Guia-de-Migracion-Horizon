@@ -1,0 +1,158 @@
+{% assign icon_from_google_id = block.id | replace: '_', '' | downcase %}
+
+
+{% style %}
+  .google-icon-{{ icon_from_google_id }} {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  .google-icon-{{ icon_from_google_id }} .material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: {{ block.settings.icon_size }}px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'liga';
+    color: {{ block.settings.icon_color }};
+    {% if block.settings.icon_style == 'outlined' %}
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    {% elsif block.settings.icon_style == 'filled' %}
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    {% elsif block.settings.icon_style == 'rounded' %}
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      font-family: 'Material Symbols Rounded';
+    {% elsif block.settings.icon_style == 'sharp' %}
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      font-family: 'Material Symbols Sharp';
+    {% endif %}
+  }
+
+
+  .google-icon-image-{{ icon_from_google_id }} {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    object-fit: contain;
+  }
+{% endstyle %}
+
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+  rel="stylesheet"
+>
+<link
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+  rel="stylesheet"
+>
+<link
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+  rel="stylesheet"
+>
+
+
+<div
+  class="google-icon-{{ icon_from_google_id }}"
+  {{ block.shopify_attributes }}
+>
+  {% if block.settings.image_icon %}
+    <img
+      src="{{ block.settings.image_icon | image_url: width: 200 }}"
+      alt="{{ block.settings.icon_name | default: 'Icon' }}"
+      class="google-icon-image-{{ icon_from_google_id }}"
+      loading="lazy"
+      width="{{ block.settings.icon_size }}"
+      height="{{ block.settings.icon_size }}"
+    >
+  {% else %}
+    <span class="material-symbols-outlined">
+      {{ block.settings.icon_name | default: 'build' }}
+    </span>
+  {% endif %}
+</div>
+
+
+{% schema %}
+{
+  "name": "Google icon",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Icon settings"
+    },
+    {
+      "type": "text",
+      "id": "icon_name",
+      "label": "Icon name",
+      "default": "build",
+      "info": "Introduce el nombre del icono según Google Fonts Icons (ejemplo: shopping_cart, favorite, search)"
+    },
+    {
+      "type": "select",
+      "id": "icon_style",
+      "label": "Icon style",
+      "options": [
+        {
+          "value": "outlined",
+          "label": "Outlined"
+        },
+        {
+          "value": "filled",
+          "label": "Filled"
+        },
+        {
+          "value": "rounded",
+          "label": "Rounded"
+        },
+        {
+          "value": "sharp",
+          "label": "Sharp"
+        }
+      ],
+      "default": "outlined"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 16,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Image icon"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_icon",
+      "label": "Upload image",
+      "info": "Si subes una imagen, se usará en lugar del icono de Google Fonts"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Google icon"
+    }
+  ]
+}
+{% endschema %}
